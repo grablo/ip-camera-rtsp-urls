@@ -1,0 +1,1290 @@
+[
+  {
+    "id": "hikvision",
+    "name": "Hikvision",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/Streaming/Channels/{ch}01",
+        "sub": "/Streaming/Channels/{ch}02",
+        "third": null,
+        "port": null,
+        "note": "IP cameras: ch=1. NVRs: channel x 100 + stream (01 main, 02 sub). On hybrid DVRs, IP channels continue after the analog channels (e.g. 1701 = first IP camera; source: https://us-legacy.hikvision.com/sites/default/files/tb/tb_rtsp_and_http_urls_120915us.pdf).",
+        "source": "https://supportusa.hikvision.com/support/solutions/articles/17000129064-how-do-i-get-my-rtsp-stream-"
+      },
+      {
+        "main": "/ISAPI/Streaming/channels/{ch}01",
+        "sub": "/ISAPI/Streaming/channels/{ch}02",
+        "third": "/ISAPI/Streaming/channels/{ch}03",
+        "port": null,
+        "note": "ID = channel x 100 + stream (1 main, 2 sub, 3 third). 103 is derived from the official formula; the documentation gives no example of it.",
+        "source": "https://enpinfo.hikvision.com/unzip/20201110210551_77443_doc/GUID-515FF2B5-5E01-4F03-8B81-4CA5BD621965.html"
+      },
+      {
+        "main": "/Streaming/Channels/1",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Fixed candidate path used by Frigate (no channel number).",
+        "source": "https://github.com/blakeblackshear/frigate/blob/dev/frigate/api/camera.py"
+      },
+      {
+        "main": "/PSIA/streaming/channels/101",
+        "sub": "/PSIA/streaming/channels/102",
+        "third": null,
+        "port": null,
+        "note": "Old PSIA path (2013-era DS-2CD20xx, etc.).",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Hikvision DS-2CD2032-I etc.'; maker doc cited by CamioCam: http://www.hikvision.com/UploadFile/image/2013061411054615328.pdf"
+      }
+    ]
+  },
+  {
+    "id": "dahua",
+    "name": "Dahua",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/cam/realmonitor?channel={ch}&subtype=0",
+        "sub": "/cam/realmonitor?channel={ch}&subtype=1",
+        "third": "/cam/realmonitor?channel={ch}&subtype=2",
+        "port": null,
+        "note": "channel starts at 1; on an NVR, use the channel number. subtype: 0 main, 1 sub stream 1, 2 sub stream 2. A stream that is disabled or does not exist returns an error.",
+        "source": "https://material.dahuasecurity.com/uploads/cpq/DOR/PUM0001826/Dahua-Network-Camera-Web-5.0_Operation-Manual_V1.0.6.pdf; https://support.amcrest.com/hc/en-us/article_attachments/360012029291 (Amcrest HTTP API, 4.1.1 Get real-time stream, pp. 17-18); same wording in the Dahua CGI document https://ftp.asm.cz/Dahua/kamerove_systemy/SDK&API/CGI_snapshot,stream.pdf (distributor's copy)"
+      }
+    ]
+  },
+  {
+    "id": "amcrest",
+    "name": "Amcrest",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/cam/realmonitor?channel={ch}&subtype=0",
+        "sub": "/cam/realmonitor?channel={ch}&subtype=1",
+        "third": "/cam/realmonitor?channel={ch}&subtype=2",
+        "port": null,
+        "note": "Same format as Dahua. Verified in the official Amcrest HTTP API PDF (the same document cited for Dahua).",
+        "source": "https://support.amcrest.com/hc/en-us/article_attachments/360012029291"
+      }
+    ]
+  },
+  {
+    "id": "lorex",
+    "name": "Lorex",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/cam/realmonitor?channel={ch}&subtype=0",
+        "sub": "/cam/realmonitor?channel={ch}&subtype=1",
+        "third": null,
+        "port": null,
+        "note": "Lorex official help: some recorder models (models not specified); 0 main, 1 sub. Matches the CamioCam NR9320N row.",
+        "source": "https://www.lorex.com/blogs/help/ip-cameras-using-real-time-streaming-protocol-rtsp-with-your-dvr-nvr"
+      },
+      {
+        "main": "/video.mp4",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "LNE3003 standalone IP camera.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Lorex LNE3003'; maker doc cited by CamioCam: https://www.lorextechnology.com/downloads/ip-cameras/LN-Series/LNE3003i_Specs_R1.pdf"
+      }
+    ]
+  },
+  {
+    "id": "hanwha",
+    "name": "Hanwha Vision (Wisenet)",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/profile2/media.smp",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "The profile number is the number in the camera's video profile list. The official documentation does not say which numbers are main and sub (it varies by device), so no sub stream is listed. Hanwha official documentation: the default H.264 stream is profile 2, the default H.265 stream is profile 3, and fisheye cameras have only one default profile.",
+        "source": "https://support.hanwhavision.com/hc/ko/articles/47257361792659; https://support.hanwhavision.com/hc/en-001/articles/47256874514195-How-to-use-Hanwha-cameras-with-exacqVision"
+      },
+      {
+        "main": "/{ch0}/profile2/media.smp",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Multi-sensor cameras and encoders. Sensor numbers start at 0 ({ch0} = channel - 1). Matches the CamioCam 'Hanwha multi-sensor' row.",
+        "source": "https://support.hanwhavision.com/hc/en-001/articles/47782445700243"
+      }
+    ]
+  },
+  {
+    "id": "hanwha_nvr",
+    "name": "Hanwha Vision NVR (Wisenet)",
+    "defaultPort": 558,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/LiveChannel/{ch0}/media.smp",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Channels start at 0. The port is the last value of the NVR's device port range (558 if the range is 554-558). A stream is selected with the form '/media.smp/profile=<n>'.",
+        "source": "https://support.hanwhavision.com/hc/en-001/articles/47257331451667"
+      }
+    ]
+  },
+  {
+    "id": "samsung_techwin",
+    "name": "Samsung Techwin (legacy)",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/profile5/media.smp",
+        "sub": "/profile3/media.smp",
+        "third": "/profile4/media.smp",
+        "port": null,
+        "note": "SmartCam SNH series: 5 = 1080p, 4 = 720p, 3 = 360p.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Samsung Techwin SNH-E6411BN etc.'; maker doc cited by CamioCam: https://www.samsungsv.com/Download/SNH-P6410BN-User-Manual.pdf"
+      },
+      {
+        "main": "/ch01/0",
+        "sub": "/ch01/1",
+        "third": "/ch01/2",
+        "port": null,
+        "note": "0 main, 1 sub, 2 mobile.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Samsung Techwin SNC-4241BE'; maker doc cited by CamioCam: https://www.samsungsv.com/Download/SNK-D5081_User_Manaul.pdf"
+      },
+      {
+        "main": "/ch{ch2}/0",
+        "sub": "/ch{ch2}/1",
+        "third": null,
+        "port": null,
+        "note": "SDR/SDH DVRs, channels 01-08.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Samsung Techwin SDR-B74301'; maker doc cited by CamioCam: https://cdn.shopify.com/s/files/1/0860/0718/files/SDH-B74041_-_User_Manual.pdf"
+      }
+    ]
+  },
+  {
+    "id": "axis",
+    "name": "Axis",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/axis-media/media.amp",
+        "sub": "/axis-media/media.amp?resolution=640x480",
+        "third": null,
+        "port": null,
+        "note": "The sub stream is the same stream scaled down with the resolution parameter. 640x480 is an example value chosen for this list and must be a resolution the camera supports (the official example uses 1920x1080).",
+        "source": "https://developer.axis.com/video-streaming-and-recording/video-streaming/how-to-guides/rtsp/"
+      },
+      {
+        "main": "/axis-media/media.amp?camera={ch}",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Multi-channel encoders and multi-sensor cameras. camera defaults to 1.",
+        "source": "https://developer.axis.com/video-streaming-and-recording/video-streaming/how-to-guides/configure-channel-defaults/"
+      },
+      {
+        "main": "/mpeg4/media.amp",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Older MPEG-4 models.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Axis 207W'; maker doc cited by CamioCam: http://www.axis.com/files/manuals/um_207w_mw_33158_en_1208.pdf"
+      },
+      {
+        "main": "/mpeg4/{ch}/media.amp",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "241Q video server, channels 1-4.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Axis 241Q'; maker doc cited by CamioCam: https://www.axis.com/files/manuals/um_241S_241Q_36455__en_0908.pdf"
+      }
+    ]
+  },
+  {
+    "id": "uniview",
+    "name": "Uniview",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/media/video1",
+        "sub": "/media/video2",
+        "third": "/media/video3",
+        "port": null,
+        "note": "IP cameras. The second lens uses /media2/video1 to /media2/video3.",
+        "source": "https://www.uniview.com/res/202310/26/20231026_1890310_How%20to%20Get%20a%20Uniview%20Camera's%20RTSP%20Stream_974039_168459_0.pdf"
+      },
+      {
+        "main": "/unicast/c{ch}/s0/live",
+        "sub": "/unicast/c{ch}/s1/live",
+        "third": null,
+        "port": null,
+        "note": "NVRs. The channel number after c is not zero-padded; s0 main, s1 sub.",
+        "source": "https://www.uniview.com/res/202310/26/20231026_1890323_How%20to%20Get%20the%20URLs%20for%20Uniview%20IPC%20and%20NVR_975509_168459_0.pdf"
+      }
+    ]
+  },
+  {
+    "id": "reolink",
+    "name": "Reolink",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/Preview_{ch2}_main",
+        "sub": "/Preview_{ch2}_sub",
+        "third": null,
+        "port": null,
+        "note": "Cameras use 01; NVRs and the Home Hub use the channel number. RTSP is turned off on many models.",
+        "source": "https://support.reolink.com/articles/900000630706-Introduction-to-RTSP/"
+      },
+      {
+        "main": "/h264Preview_{ch2}_main",
+        "sub": "/h264Preview_{ch2}_sub",
+        "third": null,
+        "port": null,
+        "note": "Older format. Not listed on Reolink's official RTSP page.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Reolink RLC-410WS;RLC-423S'; maker doc cited by CamioCam: https://reolink.com/docs/Reolink-Info.pdf"
+      }
+    ]
+  },
+  {
+    "id": "tapo",
+    "name": "TP-Link Tapo",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/stream1",
+        "sub": "/stream2",
+        "third": null,
+        "port": null,
+        "note": "Requires a camera account created in the Tapo app. Many battery-powered models do not support RTSP.",
+        "source": "https://www.tp-link.com/us/support/faq/2680/"
+      },
+      {
+        "main": "/stream6",
+        "sub": "/stream7",
+        "third": null,
+        "port": null,
+        "note": "Second (telephoto) lens on dual-lens models.",
+        "source": "https://www.tp-link.com/us/support/faq/2680/"
+      }
+    ]
+  },
+  {
+    "id": "vigi",
+    "name": "TP-Link VIGI",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/stream1",
+        "sub": "/stream2",
+        "third": null,
+        "port": null,
+        "note": "Cameras.",
+        "source": "https://www.tp-link.com/us/support/faq/3718/"
+      },
+      {
+        "main": "/live/{ch}/1/avm",
+        "sub": "/live/{ch}/2/avm",
+        "third": null,
+        "port": null,
+        "note": "NVRs (with the RTSP server enabled). Channels start at 1; 0 is Channel-Zero.",
+        "source": "https://www.tp-link.com/en/support/faq/4677/"
+      }
+    ]
+  },
+  {
+    "id": "ezviz",
+    "name": "EZVIZ",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/ch1/main",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Official guide for C6N/TY1/TY2. The password is the verification code on the device label. The official documentation gives no sub stream path.",
+        "source": "https://m-support.ezviz.com/product/TY1/27458"
+      }
+    ]
+  },
+  {
+    "id": "milesight",
+    "name": "Milesight",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/main",
+        "sub": "/sub",
+        "third": "/third",
+        "port": null,
+        "note": "IP cameras.",
+        "source": "https://www.milesight.com/support/download/document-center/ipc-series/ai/en/user-manual/rtsp.html"
+      },
+      {
+        "main": "/ch_1{ch02}",
+        "sub": "/ch_4{ch02}",
+        "third": null,
+        "port": null,
+        "note": "NVRs. The last two digits are the channel, starting at 00 ({ch02} = channel - 1, two digits). 1 main, 4 sub.",
+        "source": "https://www.milesight.com/support/download/document-center/nvr-series/qt/user-manual/more.html"
+      }
+    ]
+  },
+  {
+    "id": "zosi",
+    "name": "Zosi",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/video1",
+        "sub": "/video2",
+        "third": null,
+        "port": null,
+        "note": "Standalone Wi-Fi cameras.",
+        "source": "https://supports.zositech.com/hc/en-us/articles/50660190002457-How-to-View-IPC-Camera-Footage-via-RTSP"
+      },
+      {
+        "main": "/ucast/11",
+        "sub": "/ucast/12",
+        "third": null,
+        "port": null,
+        "note": "PoE cameras.",
+        "source": "https://supports.zositech.com/hc/en-us/articles/50660190002457-How-to-View-IPC-Camera-Footage-via-RTSP"
+      }
+    ]
+  },
+  {
+    "id": "idis",
+    "name": "IDIS",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/trackID=1",
+        "sub": "/trackID=2",
+        "third": null,
+        "port": null,
+        "note": "Cameras. Official wording: camera rtsp://ID:password@IP:RTSP port/trackID='Stream number'; NVR/TVR rtsp://.../trackID=<camera-number>&streamID=<stream-number>; default port 554. The FAQ does not say which number is the main stream (1 = main, 2 = sub has no official basis). The YouTube example in the same FAQ uses trackID=1.",
+        "source": "https://www.idisglobal.com/index/faq/page/165?numIndex=2 (IDIS official FAQ #872 \"What are the RTSP Address URL for each products?\", 2020-05-12)"
+      },
+      {
+        "main": "/trackID={ch}&streamID=1",
+        "sub": "/trackID={ch}&streamID=2",
+        "third": null,
+        "port": null,
+        "note": "NVRs: trackID = camera number, streamID = stream quality. Official wording: camera rtsp://ID:password@IP:RTSP port/trackID='Stream number'; NVR/TVR rtsp://.../trackID=<camera-number>&streamID=<stream-number>; default port 554. The FAQ does not say which number is the main stream (1 = main, 2 = sub has no official basis). The YouTube example in the same FAQ uses trackID=1.",
+        "source": "https://www.idisglobal.com/index/faq/page/165?numIndex=2 (IDIS official FAQ #872 \"What are the RTSP Address URL for each products?\", 2020-05-12)"
+      }
+    ]
+  },
+  {
+    "id": "truen",
+    "name": "TRUEN",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/video1+audio1",
+        "sub": "/video1s1+audio1",
+        "third": "/video1s2+audio1",
+        "port": null,
+        "note": "Path exactly as written in the official document.",
+        "source": "https://www.truen.co.kr/customer/technology.php?ptype=view&idx=68&page=1&code=technology"
+      },
+      {
+        "main": "/video{ch}+audio1",
+        "sub": "/video{ch}s+audio1",
+        "third": null,
+        "port": null,
+        "note": "TCS-400 and TCS-410 only, channels 1-4.",
+        "source": "https://www.truen.co.kr/customer/technology.php?ptype=view&idx=68&page=1&code=technology"
+      }
+    ]
+  },
+  {
+    "id": "iptime",
+    "name": "ipTIME",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/onvif1",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "C400G, C500G, C400GS, C500GS. Turn on RTSP in the app; user name admin.",
+        "source": "https://iptime.com/support/faq/26587"
+      }
+    ]
+  },
+  {
+    "id": "foscam",
+    "name": "Foscam",
+    "defaultPort": 88,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/videoMain",
+        "sub": "/videoSub",
+        "third": null,
+        "port": null,
+        "note": "On most models this is the same as the HTTP port (default 88). Some later revisions of the C1 and FI98xx use 554.",
+        "source": "https://www.foscam.com/faqs/view.html?id=81"
+      }
+    ]
+  },
+  {
+    "id": "panasonic",
+    "name": "Panasonic / i-PRO",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/Src/MediaInput/stream_1",
+        "sub": "/Src/MediaInput/stream_2",
+        "third": "/Src/MediaInput/stream_3",
+        "port": null,
+        "note": "H.265-generation models (stream_4 also exists).",
+        "source": "https://i-pro.com/products_and_solutions/en/media/documentation_file/command-interface-i-pro_h265models"
+      },
+      {
+        "main": "/Src/MediaInput/stream_1/ch_{ch}",
+        "sub": "/Src/MediaInput/stream_2/ch_{ch}",
+        "third": null,
+        "port": null,
+        "note": "Multi-sensor and fisheye quad models, ch 1-4.",
+        "source": "https://i-pro.com/products_and_solutions/en/media/documentation_file/command-interface-i-pro_h265models"
+      },
+      {
+        "main": "/Src/MediaInput/h264/stream_1",
+        "sub": "/Src/MediaInput/h264/stream_2",
+        "third": null,
+        "port": null,
+        "note": "Old URL; only when the encoding is H.264.",
+        "source": "https://i-pro.com/products_and_solutions/en/media/documentation_file/command-interface-i-pro_h265models"
+      },
+      {
+        "main": "/MediaInput/h264",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Older BL/WV series.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Panasonic BL-C230;WC-S3531L'; maker doc cited by CamioCam: http://security.panasonic.com/support/technical/qr_guide_c230/"
+      },
+      {
+        "main": "/nphMpeg4/nil-640x480",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Older BB-HCM series.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Panasonic BB-HCM531A'"
+      }
+    ]
+  },
+  {
+    "id": "bosch",
+    "name": "Bosch",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/?inst=1",
+        "sub": "/?inst=2",
+        "third": null,
+        "port": null,
+        "note": "VIP cameras and encoders (now in the Keenfinity knowledge base).",
+        "source": "https://knowledge.keenfinity-group.com/video-systems/article/how-is-rtsp-usage-supported-with-bosch-vip-devices"
+      },
+      {
+        "main": "/?line={ch}&inst=1",
+        "sub": "/?line={ch}&inst=2",
+        "third": null,
+        "port": null,
+        "note": "Multi-input encoders.",
+        "source": "https://knowledge.keenfinity-group.com/video-systems/article/how-is-rtsp-usage-supported-with-bosch-vip-devices"
+      },
+      {
+        "main": "/rtsp_tunnel",
+        "sub": null,
+        "third": null,
+        "port": 80,
+        "note": "Tunneled over HTTP (port 80); may not work on 554.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Bosch'; maker doc cited by CamioCam: http://resource.boschsecurity.us/documents/Installation_Manual_enUS_1997482635.pdf"
+      }
+    ]
+  },
+  {
+    "id": "vivotek",
+    "name": "Vivotek",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/live.sdp",
+        "sub": "/live2.sdp",
+        "third": "/live3.sdp",
+        "port": null,
+        "note": "Older firmware. The access name can be changed per stream. Matches the CamioCam CC8130 row.",
+        "source": "http://download.vivotek.com/downloadfile/downloads/usersmanuals/vs8100-v2manual_en.pdf"
+      }
+    ]
+  },
+  {
+    "id": "mobotix",
+    "name": "Mobotix",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/mobotix.h264",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Firmware with H.264 support.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Mobotix s16'; maker doc cited by CamioCam: https://www.mobotix.com/sites/default/files/2017-10/Mx_QI_S16_en_20171010.pdf"
+      }
+    ]
+  },
+  {
+    "id": "avigilon",
+    "name": "Avigilon",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/defaultPrimary?streamType=u",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "H.264 cameras. The official documentation gives no sub stream path.",
+        "source": "https://www.avigilon.com/fs/documents/avigilon-fisheye-web-interface-user-guide-en.pdf"
+      },
+      {
+        "main": "/defaultPrimary{ch0}?streamtype=u",
+        "sub": "/defaultSecondary{ch0}?streamtype=u",
+        "third": null,
+        "port": null,
+        "note": "ENC encoders, channels 0-3.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Avigilon ENC-4P-H264'; maker doc cited by CamioCam: http://avigilon.com/assets/Uploads/UG-H3A-Rev1UserGuide.pdf"
+      }
+    ]
+  },
+  {
+    "id": "geovision",
+    "name": "GeoVision",
+    "defaultPort": 8554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/CH{ch3}.sdp",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "{ch3} = zero-padded to three digits (CH001). Sub stream path not verified.",
+        "source": "http://pd.geovision.tw/faq/IPDevice/RTSP_protocol-j_revised6.pdf"
+      }
+    ]
+  },
+  {
+    "id": "acti",
+    "name": "ACTi",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/stream1",
+        "sub": "/stream2",
+        "third": null,
+        "port": null,
+        "note": "VLC guide for current models ('stream#'). The port differs by camera.",
+        "source": "http://download.acti.com/?id=29560"
+      },
+      {
+        "main": "/track1",
+        "sub": "/track3",
+        "third": "/track2",
+        "port": 7070,
+        "note": "Older models. CamioCam values: 1 high quality, 3 low quality.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'ACTi A82 Dome'; maker doc cited by CamioCam: http://www2.acti.com/getfile/KnowledgeBase_UploadFile/Third_Party_or_Open_Source_Software_Integration_20100402_006.pdf"
+      }
+    ]
+  },
+  {
+    "id": "arecont",
+    "name": "Arecont Vision (Costar)",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/h264.sdp?res=full&doublescan=0&fps=0&ssn=1",
+        "sub": "/h264.sdp?res=half&doublescan=0&fps=0&ssn=2",
+        "third": null,
+        "port": null,
+        "note": "Official syntax 'res=half/full'; ssn is a unique value per stream. fps=0 is the CamioCam value.",
+        "source": "https://sales.arecontvision.com/marketing/contents/Integration_QSG_001_ENG_001.pdf"
+      }
+    ]
+  },
+  {
+    "id": "grandstream",
+    "name": "Grandstream",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/0",
+        "sub": "/4",
+        "third": null,
+        "port": null,
+        "note": "GSC361x.",
+        "source": "https://www.grandstream.com/hubfs/Product_Documentation/GSC36XX_usermanual.pdf"
+      },
+      {
+        "main": "/{ch0}",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "GXV3504 encoder, channels 0-7.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Grandstream GXV3504'; maker doc cited by CamioCam: http://www.voipsupply.com/downloads/dl/file/id/8911/grandstream_gxv3504_manual.pdf"
+      }
+    ]
+  },
+  {
+    "id": "digital_watchdog",
+    "name": "Digital Watchdog",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/profile1",
+        "sub": "/profile2",
+        "third": null,
+        "port": null,
+        "note": "MEGApix Core Pro / Value.",
+        "source": "https://support.digital-watchdog.com/hc/en-us/articles/43284896070548"
+      },
+      {
+        "main": "/chID={ch}&streamType=main&linkType=tcp",
+        "sub": "/chID={ch}&streamType=sub&linkType=tcp",
+        "third": null,
+        "port": null,
+        "note": "COVA recorders.",
+        "source": "https://support.digital-watchdog.com/hc/en-us/articles/43283607580564"
+      },
+      {
+        "main": "/main/ch{ch}",
+        "sub": "/sub/ch{ch}",
+        "third": null,
+        "port": null,
+        "note": "VMAX IP G4 / A1 G4.",
+        "source": "https://support.digital-watchdog.com/hc/en-us/articles/43283607580564"
+      },
+      {
+        "main": "/rtsp/unicast/live/profile-{ch}",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Older VMAX.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Digital Watchdog VMAX A1 / IP Plus'"
+      }
+    ]
+  },
+  {
+    "id": "ubiquiti",
+    "name": "Ubiquiti UniFi",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/live/ch0",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Frigate brand template (example user name ubnt).",
+        "source": "https://github.com/blakeblackshear/frigate/blob/dev/web/src/types/cameraWizard.ts"
+      },
+      {
+        "main": "/s0",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Older UniFi Video cameras. UniFi Protect uses a token path generated by the app (RTSPS, port 7441), which cannot be looked up from a path list.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Unifi UVC G3'; maker doc cited by CamioCam: https://dl.ubnt.com/guides/unifivideo/UVC-G3_QSG.pdf"
+      }
+    ]
+  },
+  {
+    "id": "sony",
+    "name": "Sony",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/media/video1",
+        "sub": "/media/video2",
+        "third": null,
+        "port": null,
+        "note": "SNC series. Not confirmed in Sony's official documentation.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Sony Corporation SNC-EM632R etc.'"
+      }
+    ]
+  },
+  {
+    "id": "trendnet",
+    "name": "TRENDnet",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/Streaming/channels/101",
+        "sub": "/Streaming/channels/102",
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Trendnet IP310PI'; maker doc cited by CamioCam: https://www.trendnet.com/support/supportdetail.asp?prod=190_TV-IP310PI"
+      }
+    ]
+  },
+  {
+    "id": "dlink",
+    "name": "D-Link",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/live1.sdp",
+        "sub": "/live3.sdp",
+        "third": "/live2.sdp",
+        "port": null,
+        "note": "CamioCam: 1 high quality, 3 low quality.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'D-Link DCS-2332'; maker doc cited by CamioCam: http://www.dlink.com/-/media/Consumer_Products/DCS/DCS%202332L/Manual/DCS_2332L_A1_Manual_v100_WW.pdf"
+      },
+      {
+        "main": "/play1.sdp",
+        "sub": "/play3.sdp",
+        "third": "/play2.sdp",
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'D-Link DCS-960L;DCS-936L;DCS-2630L'; maker doc cited by CamioCam: ftp://ftp2.dlink.com/PRODUCTS/DCS-960L/REVA/DCS-960L_REVA_MANUAL_1.00_EN_US.PDF"
+      }
+    ]
+  },
+  {
+    "id": "ic_realtime",
+    "name": "IC Realtime",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/cam/realmonitor?channel={ch}&subtype=0",
+        "sub": "/cam/realmonitor?channel={ch}&subtype=1",
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'IC Realtime NVR / Camera'; maker doc cited by CamioCam: http://icrealtime.com/docs/product-manual/Man_NVR716N.pdf"
+      }
+    ]
+  },
+  {
+    "id": "qsee",
+    "name": "Q-See",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/cam/realmonitor?channel=1&subtype=0",
+        "sub": "/cam/realmonitor?channel=1&subtype=1",
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Q-See QCW2MPSL'"
+      }
+    ]
+  },
+  {
+    "id": "tvt",
+    "name": "TVT",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/?chID={ch}&streamType=main&linkType=tcp",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "CamioCam lists the main stream only.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'TVT TD2700 Series'; maker doc cited by CamioCam: http://en.tvt.net.cn/upload/products/TD-2700TC-PR%20NV9000%20Quick%20Start%20Guide-450041001028-A0-20170904.pdf"
+      }
+    ]
+  },
+  {
+    "id": "provision_isr",
+    "name": "Provision-ISR",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/udp/av0_0",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Provision-ISR R838'"
+      }
+    ]
+  },
+  {
+    "id": "lilin",
+    "name": "LILIN",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/rtsph2641080p",
+        "sub": "/rtsph264480p",
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Lilin Camera'; maker doc cited by CamioCam: https://lilin.zendesk.com/hc/en-gb/article_attachments/115002592986/LILIN_RTSP_JPEG_and_H.264_Streams_Guide.pdf"
+      }
+    ]
+  },
+  {
+    "id": "wansview",
+    "name": "Wansview",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/live/ch0",
+        "sub": "/live/ch1",
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Wansview K3 1080p'"
+      }
+    ]
+  },
+  {
+    "id": "zavio",
+    "name": "Zavio",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/video.pro1",
+        "sub": "/video.pro2",
+        "third": null,
+        "port": null,
+        "note": "Profiles 1-4. CamioCam's high/low quality labels (4/1) contradict each other, so the profiles are listed in numeric order. Check on the actual device.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Zavio B8220;B8520'"
+      }
+    ]
+  },
+  {
+    "id": "sharx",
+    "name": "Sharx Security",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/live/0/h264.sdp",
+        "sub": "/live/2/h264.sdp",
+        "third": "/live/1/h264.sdp",
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Sharx Security SCNC2900 etc.'"
+      }
+    ]
+  },
+  {
+    "id": "tyco_illustra",
+    "name": "Tyco Illustra",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/ufirststream/ufirststream",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Tyco Illustra'"
+      }
+    ]
+  },
+  {
+    "id": "doorbird",
+    "name": "DoorBird",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/mpeg/media.amp",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'DoorBird Doorbell Camera'; maker doc cited by CamioCam: http://www.doorbird.com/downloads/api_lan.pdf?rev=0.13"
+      }
+    ]
+  },
+  {
+    "id": "microseven",
+    "name": "Microseven",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/11",
+        "sub": "/13",
+        "third": "/12",
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Microseven M7XXX'"
+      }
+    ]
+  },
+  {
+    "id": "zmodo",
+    "name": "Zmodo",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/tcp/av{ch0}_0",
+        "sub": "/tcp/av{ch0}_1",
+        "third": null,
+        "port": null,
+        "note": "NVR channels 0-3.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Zmodo NVR'"
+      }
+    ]
+  },
+  {
+    "id": "ionodes",
+    "name": "IONODES",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/videoinput_1/h264_1/media.stm",
+        "sub": "/videoinput_1/h264_2/media.stm",
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'IONODE ION-E100'"
+      }
+    ]
+  },
+  {
+    "id": "matrix",
+    "name": "Matrix",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/unicaststream/1",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Matrix 3MP Fixed'"
+      }
+    ]
+  },
+  {
+    "id": "oviss",
+    "name": "OVISS",
+    "defaultPort": 8554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/video1",
+        "sub": "/video2",
+        "third": "/video3",
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'OVISS Camera'"
+      },
+      {
+        "main": "/unicast/c{ch}-n/s0/live",
+        "sub": "/unicast/c{ch}-n/s1/live",
+        "third": null,
+        "port": null,
+        "note": "NVRs.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'OVISS ProS'"
+      }
+    ]
+  },
+  {
+    "id": "invid",
+    "name": "InVid Tech",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/mode=real&idc=1&ids=1",
+        "sub": "/mode=real&idc=1&ids=3",
+        "third": "/mode=real&idc=1&ids=2",
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'InVid ELEV-P4SMOKE'"
+      }
+    ]
+  },
+  {
+    "id": "sricam",
+    "name": "Sricam",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/onvif1",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Sricam SP-009'"
+      }
+    ]
+  },
+  {
+    "id": "dbell",
+    "name": "dbell",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/av0_0",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Dbell HD+'"
+      }
+    ]
+  },
+  {
+    "id": "revo",
+    "name": "Revo",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/trackID={ch}",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "NVR channel.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Revo NVR'"
+      }
+    ]
+  },
+  {
+    "id": "adt",
+    "name": "ADT",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/trackID={ch}",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "NVR channels 1-4.",
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'ADT A-ADT4H2S'"
+      }
+    ]
+  },
+  {
+    "id": "ipccam",
+    "name": "IPCcam",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/11",
+        "sub": "/12",
+        "third": "/13",
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'IPCcam 9605E'"
+      }
+    ]
+  },
+  {
+    "id": "iegeek",
+    "name": "IeGeek",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/11",
+        "sub": "/12",
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'IeGeek CT0247US'"
+      }
+    ]
+  },
+  {
+    "id": "techview",
+    "name": "Techview",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/12",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Techview Indoor Camera'"
+      }
+    ]
+  },
+  {
+    "id": "alptop",
+    "name": "Alptop",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/0",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/CamioCam/rtsp/blob/master/cameras/paths.csv (Apache-2.0) row 'Alptop AT_LIR400'"
+      }
+    ]
+  },
+  {
+    "id": "honeywell",
+    "name": "Honeywell",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/live/{ch}/1",
+        "sub": "/live/{ch}/2",
+        "third": "/live/{ch}/3",
+        "port": null,
+        "note": "35 Series. Format rtsp://IP:port/live/<camera ID>/<stream ID>; stream ID 1 main, 2 sub, 3 third. The official example uses camera ID 1. The video mode must be set to H.264/H.265. Other series (30, 60, 70, older equIP) may use different paths.",
+        "source": "https://hbtmkto.honeywell.com/rs/127-UCB-316/images/800-26904-A_Honeywell%2035%20Series%20Cameras%20User%20Guide_JP.pdf (Honeywell 35 Series Cameras User Guide 800-26904-A, pp. 53-54)"
+      }
+    ]
+  },
+  {
+    "id": "swann",
+    "name": "Swann",
+    "defaultPort": 554,
+    "channel": true,
+    "entries": [
+      {
+        "main": "/{ch0}0",
+        "sub": "/{ch0}1",
+        "third": null,
+        "port": null,
+        "note": "Recorders only (DVR, NVR, SecureAlert, AllSecure, AdvancedX; no documentation for EliteX). Official format rtsp://admin:PW@LAN_IP:554/XY, where X = channel (0 = ch1) and Y = 0 main, 1 sub. The notation for channel 10 and above is not documented. Standalone cameras (SWIFI) do not support RTSP.",
+        "source": "https://support.swann.com/hc/en-us/articles/60259789314713-Access-Your-Swann-Camera-Using-RTSP"
+      }
+    ]
+  },
+  {
+    "id": "pelco",
+    "name": "Pelco",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/defaultPrimary?streamType=u",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Example from the Sarix Multi Enhanced manual (u = unicast). The official document says the address can only be seen on the camera web page under A/V Streams and gives no sub stream path, so none is listed. No official source was found for stream1/stream2 paths.",
+        "source": "https://www.pelco.com/fs/documents/pelco-sarix-multi-enhanced-operationsmanual-en-083023.pdf (C6729M 08/23, pp. 30-31)"
+      }
+    ]
+  },
+  {
+    "id": "annke",
+    "name": "Annke",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/Streaming/Channels/101",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "Frigate groups Annke with Hikvision and Uniview and uses this path. No official Annke documentation was found. The sub stream (102) would follow Hikvision's official formula, but it is not listed because there is no Annke source.",
+        "source": "https://github.com/blakeblackshear/frigate/blob/dev/web/src/types/cameraWizard.ts (MIT) label 'Hikvision / Uniview / Annke'"
+      }
+    ]
+  },
+  {
+    "id": "generic",
+    "name": "Unknown brand — common paths",
+    "defaultPort": 554,
+    "channel": false,
+    "entries": [
+      {
+        "main": "/h264",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": "The brand-independent paths among the 8 fixed candidates Frigate tries when ONVIF fails.",
+        "source": "https://github.com/blakeblackshear/frigate/blob/dev/frigate/api/camera.py"
+      },
+      {
+        "main": "/live.sdp",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/blakeblackshear/frigate/blob/dev/frigate/api/camera.py"
+      },
+      {
+        "main": "/media.amp",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/blakeblackshear/frigate/blob/dev/frigate/api/camera.py"
+      },
+      {
+        "main": "/stream1",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/blakeblackshear/frigate/blob/dev/frigate/api/camera.py"
+      },
+      {
+        "main": "/11",
+        "sub": null,
+        "third": null,
+        "port": null,
+        "note": null,
+        "source": "https://github.com/blakeblackshear/frigate/blob/dev/frigate/api/camera.py"
+      }
+    ]
+  }
+]

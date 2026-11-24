@@ -1,0 +1,98 @@
+IP camera RTSP URLs by brand
+Copyright 2026 Litmus NVR contributors
+
+This project includes data derived from the following third-party works.
+
+----------------------------------------------------------------------
+CamioCam/rtsp (cameras/paths.csv)
+https://github.com/CamioCam/rtsp
+Licensed under the Apache License, Version 2.0.
+
+Entries derived from cameras/paths.csv (their "source" field links to
+that file):
+
+- Hikvision: /PSIA/streaming/channels/101 (paths.csv row 'Hikvision DS-2CD2032-I etc.')
+- Lorex: /video.mp4 (paths.csv row 'Lorex LNE3003')
+- Samsung Techwin (legacy): /profile5/media.smp (paths.csv row 'Samsung Techwin SNH-E6411BN etc.')
+- Samsung Techwin (legacy): /ch01/0 (paths.csv row 'Samsung Techwin SNC-4241BE')
+- Samsung Techwin (legacy): /ch{ch2}/0 (paths.csv row 'Samsung Techwin SDR-B74301')
+- Axis: /mpeg4/media.amp (paths.csv row 'Axis 207W')
+- Axis: /mpeg4/{ch}/media.amp (paths.csv row 'Axis 241Q')
+- Reolink: /h264Preview_{ch2}_main (paths.csv row 'Reolink RLC-410WS;RLC-423S')
+- Panasonic / i-PRO: /MediaInput/h264 (paths.csv row 'Panasonic BL-C230;WC-S3531L')
+- Panasonic / i-PRO: /nphMpeg4/nil-640x480 (paths.csv row 'Panasonic BB-HCM531A')
+- Bosch: /rtsp_tunnel (paths.csv row 'Bosch')
+- Mobotix: /mobotix.h264 (paths.csv row 'Mobotix s16')
+- Avigilon: /defaultPrimary{ch0}?streamtype=u (paths.csv row 'Avigilon ENC-4P-H264')
+- ACTi: /track1 (paths.csv row 'ACTi A82 Dome')
+- Grandstream: /{ch0} (paths.csv row 'Grandstream GXV3504')
+- Digital Watchdog: /rtsp/unicast/live/profile-{ch} (paths.csv row 'Digital Watchdog VMAX A1 / IP Plus')
+- Ubiquiti UniFi: /s0 (paths.csv row 'Unifi UVC G3')
+- Sony: /media/video1 (paths.csv row 'Sony Corporation SNC-EM632R etc.')
+- TRENDnet: /Streaming/channels/101 (paths.csv row 'Trendnet IP310PI')
+- D-Link: /live1.sdp (paths.csv row 'D-Link DCS-2332')
+- D-Link: /play1.sdp (paths.csv row 'D-Link DCS-960L;DCS-936L;DCS-2630L')
+- IC Realtime: /cam/realmonitor?channel={ch}&subtype=0 (paths.csv row 'IC Realtime NVR / Camera')
+- Q-See: /cam/realmonitor?channel=1&subtype=0 (paths.csv row 'Q-See QCW2MPSL')
+- TVT: /?chID={ch}&streamType=main&linkType=tcp (paths.csv row 'TVT TD2700 Series')
+- Provision-ISR: /udp/av0_0 (paths.csv row 'Provision-ISR R838')
+- LILIN: /rtsph2641080p (paths.csv row 'Lilin Camera')
+- Wansview: /live/ch0 (paths.csv row 'Wansview K3 1080p')
+- Zavio: /video.pro1 (paths.csv row 'Zavio B8220;B8520')
+- Sharx Security: /live/0/h264.sdp (paths.csv row 'Sharx Security SCNC2900 etc.')
+- Tyco Illustra: /ufirststream/ufirststream (paths.csv row 'Tyco Illustra')
+- DoorBird: /mpeg/media.amp (paths.csv row 'DoorBird Doorbell Camera')
+- Microseven: /11 (paths.csv row 'Microseven M7XXX')
+- Zmodo: /tcp/av{ch0}_0 (paths.csv row 'Zmodo NVR')
+- IONODES: /videoinput_1/h264_1/media.stm (paths.csv row 'IONODE ION-E100')
+- Matrix: /unicaststream/1 (paths.csv row 'Matrix 3MP Fixed')
+- OVISS: /video1 (paths.csv row 'OVISS Camera')
+- OVISS: /unicast/c{ch}-n/s0/live (paths.csv row 'OVISS ProS')
+- InVid Tech: /mode=real&idc=1&ids=1 (paths.csv row 'InVid ELEV-P4SMOKE')
+- Sricam: /onvif1 (paths.csv row 'Sricam SP-009')
+- dbell: /av0_0 (paths.csv row 'Dbell HD+')
+- Revo: /trackID={ch} (paths.csv row 'Revo NVR')
+- ADT: /trackID={ch} (paths.csv row 'ADT A-ADT4H2S')
+- IPCcam: /11 (paths.csv row 'IPCcam 9605E')
+- IeGeek: /11 (paths.csv row 'IeGeek CT0247US')
+- Techview: /12 (paths.csv row 'Techview Indoor Camera')
+- Alptop: /0 (paths.csv row 'Alptop AT_LIR400')
+
+----------------------------------------------------------------------
+Frigate
+https://github.com/blakeblackshear/frigate
+Licensed under the MIT License.
+
+Entries derived from Frigate (their "source" field links to the Frigate
+repository):
+
+- Hikvision: /Streaming/Channels/1 (frigate/api/camera.py)
+- Ubiquiti UniFi: /live/ch0 (web/src/types/cameraWizard.ts)
+- Annke: /Streaming/Channels/101 (web/src/types/cameraWizard.ts)
+- Unknown brand — common paths: /h264 (frigate/api/camera.py)
+- Unknown brand — common paths: /live.sdp (frigate/api/camera.py)
+- Unknown brand — common paths: /media.amp (frigate/api/camera.py)
+- Unknown brand — common paths: /stream1 (frigate/api/camera.py)
+- Unknown brand — common paths: /11 (frigate/api/camera.py)
+
+MIT License
+
+Copyright (c) 2026 Frigate, Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
